@@ -1,17 +1,19 @@
-version: "3.8"
+version: '3.8'
 services:
   backend:
-    build: ./backend
-    image: yourdockerhubusername/pet-backend:latest
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    container_name: petfinder-backend
     ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
+      - "5000:5000"
 
   frontend:
-    build: ./frontend
-    image: yourdockerhubusername/pet-frontend:latest
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: petfinder-frontend
     ports:
       - "80:80"
+    depends_on:
+      - backend
