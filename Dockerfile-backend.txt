@@ -1,0 +1,20 @@
+# Use Node.js LTS
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY petfinder-backend/package*.json ./
+
+# Install dependencies
+RUN npm install --only=production
+
+# Copy source code
+COPY petfinder-backend/ .
+
+# Expose backend port (adjust if your app uses different one)
+EXPOSE 5000
+
+# Start the app
+CMD ["npm", "start"]
