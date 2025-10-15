@@ -47,48 +47,52 @@ pipeline {
 
         stage('Start Log Monitor') {
             steps {
-                echo "📊 Managing Petfinder log monitor service..."
-                sh '''
-                if systemctl is-active --quiet ${MONITOR_SERVICE}; then
-                    echo "Restarting existing ${MONITOR_SERVICE}..."
-                    sudo systemctl restart ${MONITOR_SERVICE}
-                else
-                    echo "Starting ${MONITOR_SERVICE}..."
-                    sudo systemctl start ${MONITOR_SERVICE}
-                fi
+                echo '📊 Managing Petfinder log monitor service...'
+                withCredentials([usernamePassword(credentialsId: 'sudo-creds', passwordVariable: 'SUDO_PASS', usernameVariable: 'SUDO_USER')]) {
+                    sh '''
+                        if systemctl is-active --quiet ${MONITOR_SERVICE}; then
+                            echo "Restarting existing ${MONITOR_SERVICE}..."
+                            echo "$SUDO_PASS" | sudo -S systemctl restart ${MONITOR_SERVICE}
+                        else
+                            echo "Starting ${MONITOR_SERVICE}..."
+                            echo "$SUDO_PASS" | sudo -S systemctl start ${MONITOR_SERVICE}
+                        fi
 
-                echo "✅ Monitor service status:"
-                sudo systemctl status ${MONITOR_SERVICE} --no-pager || true
-                '''
+                        echo "✅ Monitor service status:"
+                        echo "$SUDO_PASS" | sudo -S systemctl status ${MONITOR_SERVICE} --no-pager || true
+                    '''
+                }
             }
         }
 
         stage('Check for Alerts') {
             steps {
                 echo "🔎 Checking for any recent alerts..."
-                script {
-                    def alerts = sh(script: "sudo tail -n 5 ${ALERT_LOG} || echo 'No alerts found.'", returnStdout: true).trim()
-                    echo "Recent alerts:\n${alerts}"
+                withCredentials([usernamePassword(credentialsId: 'sudo-creds', passwordVariable: 'SUDO_PASS', usernameVariable: 'SUDO_USER')]) {
+                    script {
+                        def alerts = sh(script: "echo \"$SUDO_PASS\" | sudo -S tail -n 5 ${ALERT_LOG} || echo 'No alerts found.'", returnStdout: true).trim()
+                        echo "Recent alerts:\n${alerts}"
 
-                    if (!alerts.contains("No alerts") && alerts.length() > 0) {
-                        echo "⚠️ Alerts detected! Sending email..."
-                        emailext(
-                            subject: "⚠️ Petfinder Alert - High Error Rate Detected",
-                            body: """
-                            Hello Henry 👋,
+                        if (!alerts.contains("No alerts") && alerts.length() > 0) {
+                            echo "⚠️ Alerts detected! Sending email..."
+                            emailext(
+                                subject: "⚠️ Petfinder Alert - High Error Rate Detected",
+                                body: """
+                                Hello Henry 👋,
 
-                            The Petfinder log monitor has detected recent issues on your server.
+                                The Petfinder log monitor has detected recent issues on your server.
 
-                            ================================
-                            ${alerts}
-                            ================================
+                                ================================
+                                ${alerts}
+                                ================================
 
-                            Please check the backend logs or Jenkins console for more details.
-                            """,
-                            to: "${RECIPIENTS}"
-                        )
-                    } else {
-                        echo "✅ No alerts found in the log file."
+                                Please check the backend logs or Jenkins console for more details.
+                                """,
+                                to: "${RECIPIENTS}"
+                            )
+                        } else {
+                            echo "✅ No alerts found in the log file."
+                        }
                     }
                 }
             }
