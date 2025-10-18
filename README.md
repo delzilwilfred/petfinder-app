@@ -2,7 +2,7 @@
 
 This is my demo website for practice purpose
 
-
+```
  sudo apt update
 
  sudo apt install -y openjdk-17-jdk git docker.io
@@ -46,12 +46,12 @@ This is my demo website for practice purpose
  sudo chmod +x /usr/local/petfinder/monitor.sh
 
  sudo nano /etc/systemd/system/petfinder-monitor.service
-
+```
 To create the necessary files and configurations for deploying a PetFinder App using Docker and Jenkins, I’ll guide you step-by-step. Below are the steps to set up the frontend and backend folders, create Dockerfiles for both, a Jenkinsfile for Jenkins, and a monitoring script for monitoring Docker container logs.
 
 # Step 1: Directory Structure
 
-'''
+```
 
 /petfinder-app
   ├── /frontend
@@ -65,30 +65,31 @@ To create the necessary files and configurations for deploying a PetFinder App u
   ├── Jenkinsfile
   └── README.md
 
-'''
+```
 
 # Step 2: Create Frontend Dockerfile
 
  Frontend Dockerfile (frontend/Dockerfile)
 
-# Stage 1: Build Angular app
-
+ Stage 1: Build Angular app
+```
 FROM node:18-alpine as build
 WORKDIR /app
 COPY petfinder-frontend/package*.json ./
 RUN npm install
 COPY petfinder-frontend/ .
 RUN npm run build --prod || npm run build
-
-# Stage 2: Serve using Nginx
+```
+ Stage 2: Serve using Nginx
+```
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+```
 
-
-**Step 3: Create Backend Dockerfile
-**
+ # Step 3: Create Backend Dockerfile
+```
 # Use Node.js LTS
 FROM node:18-alpine
 
@@ -109,9 +110,9 @@ EXPOSE 5000
 
 # Start the app
 CMD ["npm", "start"]
-
+```
 # Step 4: Create docker-compose.yml
-
+```
 version: '3.8'
 
 services:
@@ -163,9 +164,9 @@ services:
 
 volumes:
   mongo-data:
-
+```
 # Step 5: Create Monitor Script for Logs
-
+```
 #!/usr/bin/env bash
 # monitor.sh - Basic log monitor + alerting + rotation
  # Usage: sudo ./monitor.sh /var/log/petfinder.log
@@ -218,24 +219,21 @@ fi
 
 sleep 10
 done
-
-Make the script executable:
+```
+# Make the script executable:
+```
 chmod +x monitor.sh
-
-Run the script to monitor the logs:
+```
+# Run the script to monitor the logs:
+```
 ./monitor.sh
-
+```
 
 # Step 6: Create Jenkinsfile for CI/CD
 
-
-
-
-
-
- 
-  
-    pipeline{
+```
+ pipeline
+   {
     agent any
     
     environment {
@@ -346,8 +344,7 @@ Run the script to monitor the logs:
     }
     }
 
-
-
+```
 # Step 7: Setup Jenkins
 
 1. Install Jenkins: If you don’t have Jenkins set up, you can follow the Jenkins installation guide Above
