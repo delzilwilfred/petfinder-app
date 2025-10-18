@@ -51,7 +51,7 @@ To create the necessary files and configurations for deploying a PetFinder App u
 
 # Step 1: Directory Structure
 
-'''''''''''''''
+'''
 
 /petfinder-app
   ├── /frontend
@@ -65,11 +65,7 @@ To create the necessary files and configurations for deploying a PetFinder App u
   ├── Jenkinsfile
   └── README.md
 
-'''''''''''''''''
-
-## Features
-
-... (other sections of your README)
+'''
 
 # Step 2: Create Frontend Dockerfile
 
