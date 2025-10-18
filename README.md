@@ -70,11 +70,11 @@ To create the necessary files and configurations for deploying a PetFinder App u
 
 # Step 2: Create Frontend Dockerfile
 
-# Frontend Dockerfile (frontend/Dockerfile)
+ Frontend Dockerfile (frontend/Dockerfile)
 
 # Stage 1: Build Angular app
-FROM node:18-alpine as build
 
+FROM node:18-alpine as build
 WORKDIR /app
 COPY petfinder-frontend/package*.json ./
 RUN npm install
