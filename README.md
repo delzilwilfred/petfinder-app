@@ -52,12 +52,17 @@ To create the necessary files and configurations for deploying a PetFinder App u
 # Step 1: Directory Structure
 
 
-- **/frontend**: Contains the React frontend app and its `Dockerfile`.
-- **/backend**: Contains the Express backend app and its `Dockerfile`.
-- **/docker-compose.yml**: Used to define and run multi-container Docker applications.
-- **/monitor.sh**: A script for monitoring Docker container logs.
-- **Jenkinsfile**: Defines the CI/CD pipeline for Jenkins.
-- **README.md**: This file, which contains the documentation for the project.
+/petfinder-app
+  ├── /frontend
+  │    ├── Dockerfile
+  │    └── ... (other frontend files like React app)
+  ├── /backend
+  │    ├── Dockerfile
+  │    └── ... (other backend files like Express app)
+  ├── /docker-compose.yml
+  ├── /monitor.sh
+  ├── Jenkinsfile
+  └── README.md
 
 ## Features
 
