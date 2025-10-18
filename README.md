@@ -1,56 +1,56 @@
-**# petfinder-app
-**
+# petfinder-app
+
 This is my demo website for practice purpose
 
 
-# sudo apt update
+ sudo apt update
 
-# sudo apt install -y openjdk-17-jdk git docker.io
+ sudo apt install -y openjdk-17-jdk git docker.io
 
 ===========================================================================
-# curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
+ curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 
 
-# echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 
   
 =======================if issue while update=============================
 
-# sudo rm -f /etc/apt/sources.list.d/jenkins.list
+ sudo rm -f /etc/apt/sources.list.d/jenkins.list
 
-# sudo rm -f /usr/share/keyrings/jenkins-keyring.asc
-
-===========================================================================
-
-# sudo apt update
-
-# sudo apt install -y Jenkins
-
-# sudo usermod -aG docker jenkins
-
-# sudo systemctl enable jenkins
-
-# sudo systemctl start Jenkins
-
-# sudo systemctl status jenkins
+ sudo rm -f /usr/share/keyrings/jenkins-keyring.asc
 
 ===========================================================================
 
-# sudo mkdir -p /usr/local/petfinder
+ sudo apt update
 
-# sudo cp monitor.sh /usr/local/petfinder/
+ sudo apt install -y Jenkins
 
-# sudo chmod +x /usr/local/petfinder/monitor.sh
+ sudo usermod -aG docker jenkins
 
-# sudo nano /etc/systemd/system/petfinder-monitor.service
+ sudo systemctl enable jenkins
+
+ sudo systemctl start Jenkins
+
+ sudo systemctl status jenkins
+
+===========================================================================
+
+ sudo mkdir -p /usr/local/petfinder
+
+ sudo cp monitor.sh /usr/local/petfinder/
+
+ sudo chmod +x /usr/local/petfinder/monitor.sh
+
+ sudo nano /etc/systemd/system/petfinder-monitor.service
 
 To create the necessary files and configurations for deploying a PetFinder App using Docker and Jenkins, I’ll guide you step-by-step. Below are the steps to set up the frontend and backend folders, create Dockerfiles for both, a Jenkinsfile for Jenkins, and a monitoring script for monitoring Docker container logs.
 
-**Step 1: Directory Structure
-**
+# Step 1: Directory Structure
+
 
 - **/frontend**: Contains the React frontend app and its `Dockerfile`.
 - **/backend**: Contains the Express backend app and its `Dockerfile`.
@@ -63,9 +63,8 @@ To create the necessary files and configurations for deploying a PetFinder App u
 
 ... (other sections of your README)
 
+# Step 2: Create Frontend Dockerfile
 
-**Step 2: Create Frontend Dockerfile
-**
 # Frontend Dockerfile (frontend/Dockerfile)
 
 # Stage 1: Build Angular app
@@ -107,8 +106,8 @@ EXPOSE 5000
 # Start the app
 CMD ["npm", "start"]
 
-**Step 4: Create docker-compose.yml
-**
+# Step 4: Create docker-compose.yml
+
 version: '3.8'
 
 services:
@@ -161,11 +160,11 @@ services:
 volumes:
   mongo-data:
 
-**Step 5: Create Monitor Script for Logs
-**
+# Step 5: Create Monitor Script for Logs
+
 #!/usr/bin/env bash
 # monitor.sh - Basic log monitor + alerting + rotation
-# Usage: sudo ./monitor.sh /var/log/petfinder.log
+ # Usage: sudo ./monitor.sh /var/log/petfinder.log
 
 
 LOG_FILE=${1:-/var/log/petfinder.log}
@@ -223,11 +222,16 @@ Run the script to monitor the logs:
 ./monitor.sh
 
 
-**Step 6: Create Jenkinsfile for CI/CD
-**
-pipeline 
-  {
-    
+# Step 6: Create Jenkinsfile for CI/CD
+
+
+
+
+
+
+ 
+  
+    pipeline{
     agent any
     
     environment {
@@ -336,11 +340,12 @@ pipeline
             echo "❌ Pipeline Failed. Check logs in Jenkins or container output."
         }
     }
-}
+    }
 
 
-**Step 7: Setup Jenkins
-**
+
+# Step 7: Setup Jenkins
+
 1. Install Jenkins: If you don’t have Jenkins set up, you can follow the Jenkins installation guide Above
 2. Create a new Jenkins job:
    .Create a new Pipeline job.
@@ -349,17 +354,17 @@ pipeline
    .Set the Script Path to Jenkinsfile.
 3. Run the Jenkins job to build, deploy, and monitor your containers.
 
-**Step 8: Automate Deployment
-**
+# Step 8: Automate Deployment
+
 You can integrate with a cloud platform (like AWS, Azure, or GCP) or container orchestration tools (like Kubernetes) to deploy the containers automatically, but that’s beyond this current setup.
 
-**Step 9: Additional Configuration (Optional)
-**
+# Step 9: Additional Configuration (Optional)
+
 1. Nginx Configuration: You can configure Nginx in your frontend Dockerfile if you need specific settings for production (e.g., reverse proxy, SSL).
 2. Environment Variables: For sensitive data like API keys or credentials, you can use Docker’s environment variable options or a .env file.
 
-**Summary
-**
+# Summary
+
 1. Created Dockerfile for both frontend and backend.
 2. Configured docker-compose.yml for multi-container deployment.
 3. Created a monitoring script to check the logs of running containers.
