@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5000/api' // 👈 adjust to your backend URL when deployed
+  apiUrl: 'http://localhost:5000/v1/users'  // ✅ correct backend route
 };
