@@ -1,4 +1,4 @@
 export const environment = {
-    production: true,
-    apiUrl: 'http://localhost:8000/v1/'
+    production: false,  // ✅ Change to false for development
+    apiUrl: 'http://localhost:5000/v1/users'  // ✅ Change port to 5000
 };
