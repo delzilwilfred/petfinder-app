@@ -15,14 +15,36 @@ const useragent = require('./app/config/useragent.js')
 dotenv.config();
 const app = express();
 
-app.use(cors(
-  {
-    origin: ['http://localhost:4200', 'http://localhost:4200/'],
-    credentials: true,
+const allowedOrigins = [
+  'http://localhost',
+  'http://localhost:80',
+  'http://127.0.0.1',
+  'http://127.0.0.1:80',
+  'http://frontend',
+  'http://frontend:80',
+  'http://petfinder-frontend',
+  'http://petfinder-frontend:80',
+  'http://localhost:4200',
+  'http://127.0.0.1:4200'
+];
 
-  }
-)
-)
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'CORS error: This site is not allowed.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
+app.options('*', cors());
+
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -60,11 +82,13 @@ app.use((req, res, next) => {
 });
 
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type,X-Requested-With, Accept,connectioncontrol,post-signature usertoken');
-  res.setHeader('Permissions-Policy', 'geolocation=(self "http://localhost:4200/" "http://localhost:4200/")')
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, connectioncontrol, post-signature, usertoken');
   next();
 });
+
 app.use(requestIp.mw());
 
 const limiter = rateLimit({

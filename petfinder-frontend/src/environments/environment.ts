@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:5000/v1/users'
+  production: true,
+  apiUrl: 'http://petfinder-backend:5000/v1/users'  // ✅ Correct for Docker network
 };
