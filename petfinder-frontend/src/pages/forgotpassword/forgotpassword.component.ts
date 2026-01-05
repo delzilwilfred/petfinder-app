@@ -19,7 +19,7 @@ export class ForgotpasswordComponent {
   onSubmit(fwform: NgForm) {
     this.spinner.show()
     if (fwform.valid) {
-      this.commonService.postRequest('users/forgot_password', { useremail: this.useremail }).then((fwresponse: any) => {
+      this.commonService.postRequest('/users/forgot_password', { useremail: this.useremail }).then((fwresponse: any) => {
         if (fwresponse.status) {
           fwform.resetForm()
           this.commonService.alert('Success', fwresponse.message)
